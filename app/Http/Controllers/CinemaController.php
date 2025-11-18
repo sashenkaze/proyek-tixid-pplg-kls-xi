@@ -6,7 +6,7 @@ use App\Models\Cinema;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\CinemaExport;
-use Str;
+use App\Models\Schedule;
 use Yajra\DataTables\Facades\DataTables;
 
 class CinemaController extends Controller
@@ -164,6 +164,21 @@ class CinemaController extends Controller
             })
             ->rawColumns(['buttons'])
             ->make(true);
+    }
+
+    public function listCinema()
+    {
+        $cinemas = Cinema::all();
+        return view('schedule.cinemas', compact('cinemas'));
+    }
+
+    public function cinemaSchedule($cinema_id)
+    {
+        // whereHas : argumen (nama relasi) 1 wajib, argumen 2 () opsional
+        $schedules = Schedule::where('cinema_id', $cinema_id)->with('movie')->whereHas('movie', function($q) {
+            $q->where('actived', 1);
+        })->get();
+        return view('schedule.cinema-schedule', compact('schedules'));
     }
 }
 

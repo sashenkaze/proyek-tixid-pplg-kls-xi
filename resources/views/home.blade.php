@@ -62,7 +62,7 @@
     </div>
 
     <!-- Carousel wrapper -->
-    <div id="carouselBasicExample" class="carousel slide" data-mdb-ride="carousel" data-mdb-carousel-init>
+    <div id="carouselBasicExample" class="carousel slide carousel-fade" data-mdb-ride="carousel" data-mdb-carousel-init>
         <!-- Indicators -->
         <div class="carousel-indicators">
             <button type="button" data-mdb-target="#carouselBasicExample" data-mdb-slide-to="0" class="active"
@@ -81,7 +81,7 @@
         <div class="carousel-inner">
             <!-- Single item -->
             <div class="carousel-item active">
-                <img src="https://asset.tix.id/microsite_v2/c0ca475a-7eeb-44c4-b556-8adf89af790c.jpeg" class="d-block w-100"
+                <img src="https://asset.tix.id/banner_promo_v2/5d77315c-eca6-4747-b3bd-991a170a81d1.webp" class="d-block w-100"
                     alt="Sunset Over the City" />
                 <div class="carousel-caption d-none d-md-block">
 
@@ -90,7 +90,7 @@
 
             <!-- Single item -->
             <div class="carousel-item">
-                <img src="https://asset.tix.id/microsite_v2/2e71513b-00b2-4c2f-ae86-e62abb3dd24e.webp" class="d-block w-100"
+                <img src="{{ asset('66f9ade8-766b-4303-b4e1-75fc13d9a517.jpg') }}" class="d-block w-100"
                     alt="Canyon at Nigh" />
                 <div class="carousel-caption d-none d-md-block">
 
@@ -99,7 +99,7 @@
 
             <!-- Single item -->
             <div class="carousel-item">
-                <img src="https://asset.tix.id/microsite_v2/884bd7a0-797a-4c05-a249-8058bfbc7051.webp" class="d-block w-100"
+                <img src="https://asset.tix.id/microsite_v2/364808bc-9f54-4246-acfa-cbb952c38470.webp" class="d-block w-100"
                     alt="Canyon at Nigh" />
                 <div class="carousel-caption d-none d-md-block">
 
@@ -164,13 +164,13 @@
 
     <div class="d-flex justify-content-center gap-5 my-3">
         @foreach ($movies as $item)
-            <div class="card" style="width: 13rem;">
+            <a href="{{ route('schedules.detail', $item['id']) }}" class="card" style="width: 13rem;">
                 <img style="object-fit: cover; min-height: 340px" src="{{ asset('storage/' . $item['poster']) }}"
                     class="card-img-top" alt="Sunset Over the Sea">
                 <div class="card-body" style="padding: 0 !important ">
-                    <p class="card-text text-center bg-primary py-2"><a href="{{ route('schedules.detail', $item['id']) }}" class="text-warning"><b>Beli Tiket</b></a></p>
+                    <p class="card-text text-center bg-primary py-2 text-warning"><b>Beli Tiket</b></p>
                 </div>
-            </div>
+            </a>
         @endforeach
     </div>
 @endsection

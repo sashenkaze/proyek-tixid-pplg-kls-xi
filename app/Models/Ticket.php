@@ -9,5 +9,32 @@ class Ticket extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['user_id', 'schedule_id', 'promo_id', 'row_of_seats', 'quantity', 'total_price', 'actived'];
+    protected $fillable = ['user_id', 'schedule_id', 'promo_id', 'row_of_seats', 'quantity', 'total_price', 'actived', 'service_fee', 'hour'];
+    protected function casts():array
+    {
+        return[
+            // agar format data yang disimpan array bukan json
+            'row_of_seats' => 'array'
+        ];
+    }
+
+    public function TicketPayment()
+    {
+        return $this->hasOne(TicketPayment::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function schedule()
+    {
+        return $this->belongsTo(Schedule::class);
+    }
+
+    public function promo()
+    {
+        return $this->belongsTo(Promo::class);
+    }
 }

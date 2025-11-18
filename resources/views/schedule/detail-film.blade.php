@@ -27,7 +27,7 @@
                     <tr>
                         <td><b class="text-secondary">Rating Usia</b></td>
                         <td class="px-3"></td>
-                        <td><span class="badge badge-danger">{{ $movie['age_rating'] }}</span></td>
+                        <td><span class="badge badge-danger">{{ $movie['age_rating'] }}+    </span></td>
                     </tr>
                 </table>
             </div>
@@ -122,16 +122,55 @@
                             </div>
                         </div>
                         <div class="d-flex gap-3 ps-3 my-2">
-                            @foreach ($schedule['hours'] as $hours)
-                                <div class="btn btn-outline-secondary">{{ $hours }}</div>
+                            @foreach ($schedule['hours'] as $index => $hours)
+                                {{-- this : mengirimkan element html ini ke js untuk di manipulasi --}}
+                                <div class="btn btn-outline-secondary" style="cursor: pointer" onclick="selectedHour('{{ $schedule->id }}', '{{ $index }}', this)">{{ $hours }}</div>
                             @endforeach
                         </div>
                     </div>
                     <hr>
                 @endforeach
             </div>
-            <div class="w-100 p-2 bg-light text-center fixed-bottom">
-                <a href=""><i class="fa-solid fa-ticket"></i>BELI TIKET</a>
-            </div>
+            <div class="w-100 p-2 bg-light text-center fixed-bottom" id="wrapBtn">
+                {{-- disabled button = kalau  --}}
+                <a href="javascript:void(0)" id="btnTicket"><i class="fa-solid fa-ticket"></i> BELI TIKET</a>
+            </div>  
         </div>
     @endsection
+
+@push('script')
+        <script>
+            // menyimpan elemen sebelumnya yang pernah di klik
+            let elementBefore = null;
+            function selectedHour(scheduleId, hourId, el) {
+                // jika elemen sebelumnya ada, dan skrg pindah ke elemen lain kliknya. ubah elemen sebelumnya jadi putih lagi
+                if (elementBefore) {
+                    // ubah styling css : style.property
+                    elementBefore.style.background = "";
+                    elementBefore.style.color = "";
+                    // property css kebab (border-color) di js jadi camel case (borderColor)
+                    elementBefore.style.borderColor = "";
+                }
+                // kasih warna ke element baru
+                el.style.background = "#112645";
+                el.style.color = "white";
+                el.style.borderColor = "#112645";
+                // update elemen sebelumnya pake elemen baru
+                elementBefore = el;
+
+                let wrapBtn = document.querySelector("#wrapBtn");
+                let btnTicket = document.querySelector("#btnTicket");
+                // kasih warna biru ke div wrap dan hilangkan warna abu
+                // warna abu dari 'bg-light' class bootstrap
+                wrapBtn.classList.remove('bg-light');
+                wrapBtn.style.background = "#112645";
+                // siapkan route
+                let url = "{{ route('schedules.show-seats', ['scheduleId' => ':scheduleId', 'hourId' => ':hourId']) }}"
+                .replace(":scheduleId", scheduleId) //ubah parameter (:) dengan value dari js
+                .replace(":hourId", hourId);
+                // isi url ke href btnTicket
+                btnTicket.href = url;
+                btnTicket.style.color = 'white';
+            }
+        </script>
+@endpush

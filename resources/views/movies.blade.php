@@ -1,6 +1,32 @@
 @extends('templates.app')
 
 @section('content')
+    <style>
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+        }
+
+        .card-body {
+            transition: transform 0.3 ease, box-shadow 0.3 ease;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .card.hover-shadow:hover .card-text a {
+            color: #fff !important;
+            background-color: #0d6efd !important;
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+    </style>
     <div class="container my-3 mt-5">
         <h5 class="mb-3">Seluruh Film Sedang Tayang</h5>
 
@@ -24,19 +50,15 @@
 
         <div class="d-flex justify-content-center flex-wrap gap-5 my-3">
             @foreach ($movies as $item)
-                <div class="card" style="width: 13rem; margin: 5px;">
+                <a href="{{ route('schedules.detail', $item['id']) }}" class="card" style="width: 13rem; margin: 5px;">
                     <img style="object-fit: cover; min-height: 340px" src="{{ asset('storage/' . $item['poster']) }}"
                         class="card-img-top" alt="Poster Film">
                     <div class="card-body p-0">
-                        <a href="{{ route('schedules.detail', $item['id']) }}">
-                            <p class="card-text text-center bg-primary py-2 mb-0">
-
-                                <b class="text-warning">Beli Tiket</b>
-
-                            </p>
-                        </a>
+                        <p class="card-text text-center bg-primary py-2 mb-0">
+                            <b class="text-warning">Beli Tiket</b>
+                        </p>
                     </div>
-                </div>
+                </a>
             @endforeach
         </div>
     </div>

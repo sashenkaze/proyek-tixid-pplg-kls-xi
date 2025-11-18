@@ -78,8 +78,8 @@
                     @else
                         <a class="nav-link active" aria-current="page" href="{{ route('home') }}"><i
                                 class="fa-solid fa-house me-2"></i>Beranda</a>
-                        <a class="nav-link" href=""><i class="fa-solid fa-film me-2"></i>Bioskop</a>
-                        <a class="nav-link" href="#"><i class="fa-solid fa-ticket me-2"></i>Tiket</a>
+                        <a class="nav-link" href="{{ route('cinemas.list') }}"><i class="fa-solid fa-film me-2"></i>Bioskop</a>
+                        <a class="nav-link" href="{{ route('tickets.index') }}"><i class="fa-solid fa-ticket me-2"></i>Tiket</a>
                     @endif
                 </div>
 
@@ -125,6 +125,9 @@
 
      {{-- CDN JS datatables --}}
     <script src="https://cdn.datatables.net/2.3.4/js/dataTables.min.js"></script>
+
+    {{-- CDN chartJS --}}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     {{-- yield versi js / dinamis isi js --}}
     @stack('script')

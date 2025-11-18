@@ -22,7 +22,7 @@ class MovieController extends Controller
         // Format mengurutkan data : orderBy('column', 'DEC/ASC') -> DESC z-a/9-0, ASC a-z/0-9
         // Get() : mengambil seluruh data hasil filter
         // Limit(angka) : mengambil data dengan jumlah tertentu
-        $movies = Movie::where('actived', 1)->orderBy('created_at', 'DESC')->limit(5)->get();
+        $movies = Movie::where('actived', 1)->inRandomOrder()->limit(5)->get();
         return view('home', compact('movies'));
     }
 
@@ -201,7 +201,7 @@ class MovieController extends Controller
     public function update(Request $request, $id)
     {
         // Cek seluruh request data dr input form
-        // Dd($request->all());
+        // dd($request->all());
         $request->validate([
             'title' => 'required',
             'duration' => 'required',
@@ -263,6 +263,16 @@ class MovieController extends Controller
     /**
      * Remove the specified resource from storage.
      */
+
+    public function dataChart() {
+        $movieActive = Movie::where('actived', 1)->count();
+        $movieNonActive = Movie::where('actived', 0)->count();
+
+        $labels = ['Film Aktif', 'Film Non-Aktif'];
+        $data = [$movieActive, $movieNonActive];
+
+        return response()->json(['labels' => $labels, 'data' => $data]);
+    }
     public function destroy($id)
     {
         $schedules = Schedule::where('movie_id', $id)->count();

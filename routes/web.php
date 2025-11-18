@@ -5,16 +5,35 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\PromoController;
 use App\Http\Controllers\ScheduleController;
-use App\Models\Cinema;
+use App\Http\Controllers\TicketController;
 use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', [MovieController::class, 'home'])->name('home');
-route::get('/movies/all', [MovieController::class, 'homeAllMovie'])->name('home.movies.all');
+Route::get('/movies/all', [MovieController::class, 'homeAllMovie'])->name('home.movies.all');
 //tidak memerlukan data : route - view
 //memerlukan data : route - controller - model - controller - view
 
 Route::get('/schedules/{movie_id}', [MovieController::class, 'movieSchedules'])->name('schedules.detail');
+
+// daftar bioskop
+Route::get('/cinemas/list', [CinemaController::class, 'listCinema'])->name('cinemas.list');
+Route::get('cinemas/{cinema_id}/schedules', [CinemaController::class, 'cinemaSchedule'])->name('cinemas.schedules');
+
+// halaman pilih kursi
+Route::middleware('isUser')->group(function() {
+    Route::get('/schedules/{scheduleId}/hours/{hourId}/show-seats', [TicketController::class, 'showSeats'])->name('schedules.show-seats');
+    Route::prefix('/tickets')->name('tickets.')->group(function() {
+        Route::get('/', [TicketController::class, 'index'])->name('index');
+        Route::post('/', [TicketController::class, 'store'])->name('store');
+        Route::get('/{ticketId}/order', [TicketController::class, 'ticketOrder'])->name('order');
+        Route::post('/{ticketId}/barcode', [TicketController::class, 'createBarcode'])->name('barcode');
+        Route::get('/{ticketId}/payment', [TicketController::class, 'paymentPage'])->name('payment');
+        Route::patch('/{ticketId}/payment/proof', [TicketController::class, 'proofPayment'])->name('payment.proof');
+        Route::get('/{ticketId}', [TicketController::class, 'show'])->name('show');
+        Route::get('/{ticketId}/export/pdf', [Ticketcontroller::class, 'exportPdf'])->name('export.pdf');
+    });
+});
 
 Route::get('/signup', function () {
     return view('signup');
@@ -63,6 +82,7 @@ route::prefix('/admin')->name('admin.')->group(function () {
 });
 
 Route::middleware('isAdmin')->prefix('/admin')->name('admin.')->group(function () {
+    Route::get('/tickets/chart', [TicketController::class, 'chartData'])->name('tickets.chart');
     Route::get('/dashboard', function () {
         return view('admin.dashboard');
     })->name('dashboard');
@@ -104,6 +124,7 @@ Route::middleware('isAdmin')->prefix('/admin')->name('admin.')->group(function (
 
     //films
     Route::prefix('/movies')->name('movies.')->group(function () {
+        Route::get('/chart', [MovieController::class, 'dataChart'])->name('chart');
         Route::get('/', [MovieController::class, 'index'])->name('index');
         Route::get('/create', [MovieController::class, 'create'])->name('create');
         Route::post('/store', [MovieController::class, 'store'])->name('store');
